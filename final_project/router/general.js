@@ -17,6 +17,9 @@ public_users.get("/", function (req, res) {
 public_users.get("/isbn/:isbn", function (req, res) {
   //Write your code here
   const { isbn } = req.params;
+  if (!books.hasOwnProperty(isbn)) {
+    return res.status(300).send("Book not found");
+  }
   const book = books[isbn];
   return res.status(300).json({ [isbn]: book });
 });
