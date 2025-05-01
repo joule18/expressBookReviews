@@ -61,6 +61,20 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   return res.status(200).json({ message: "Review successfully added." });
 });
 
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const { isbn } = req.params;
+  if (!books.hasOwnProperty(isbn)) {
+    return res.status(404).json({ message: "Book not found" });
+  }
+  const { username } = req.session.user;
+
+  if (books[isbn].reviews.hasOwnProperty(username)) {
+    delete books[isbn].reviews[username];
+    return res.status(200).json({ message: "Review removed successfully" });
+  }
+  return res.status(400).json({ message: "No reviews found for this user" });
+});
+
 //custom log out for testing purposes
 regd_users.post("/logout", (req, res) => {
   req.session.destroy((err) => {
