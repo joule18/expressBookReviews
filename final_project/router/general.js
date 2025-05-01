@@ -18,7 +18,7 @@ public_users.get("/isbn/:isbn", function (req, res) {
   //Write your code here
   const { isbn } = req.params;
   if (!books.hasOwnProperty(isbn)) {
-    return res.status(300).send("Book not found");
+    return res.status(404).json({ message: "Book not found." });
   }
   const book = books[isbn];
   return res.status(300).json({ [isbn]: book });
@@ -36,7 +36,9 @@ public_users.get("/author/:author", function (req, res) {
     }
   });
   if (Object.keys(booksByAuthor).length == 0) {
-    return res.status(300).send("Author is not present on book collection.");
+    return res
+      .status(404)
+      .json({ message: "Author is not found on book collection." });
   }
   return res.status(300).json(booksByAuthor);
 });
@@ -53,7 +55,9 @@ public_users.get("/title/:title", function (req, res) {
     }
   });
   if (Object.keys(booksByTitle).length == 0) {
-    return res.status(300).send("Title is not present on book collection.");
+    return res
+      .status(404)
+      .json({ message: "Title is not found on book collection." });
   }
   return res.status(300).json(booksByTitle);
 });
@@ -62,7 +66,7 @@ public_users.get("/title/:title", function (req, res) {
 public_users.get("/review/:isbn", function (req, res) {
   const { isbn } = req.params;
   if (!books.hasOwnProperty(isbn)) {
-    return res.status(300).send("Book not found");
+    return res.status(404).json({ message: "Book not found." });
   }
   return res.status(300).json(books[isbn].reviews);
 });
