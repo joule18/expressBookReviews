@@ -28,7 +28,8 @@ public_users.get("/author/:author", function (req, res) {
   const bookKeys = Object.keys(books);
   let booksByAuthor = {};
   bookKeys.forEach((el) => {
-    if (books[el].author.toLowerCase().includes(author)) {
+    const authorName = books[el].author.toLowerCase().split(" ");
+    if (authorName.find((el) => el === author)) {
       booksByAuthor[el] = books[el];
     }
   });
