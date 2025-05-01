@@ -45,11 +45,7 @@ public_users.get("/title/:title", function (req, res) {
   const bookKeys = Object.keys(books);
   let booksByTitle = {};
   bookKeys.forEach((el) => {
-    const bookTitle = books[el].title.toLowerCase().split(" ");
-    if (
-      bookTitle.find((el) => el === title) ||
-      books[el].title.toLowerCase() === title
-    ) {
+    if (books[el].title.toLowerCase() === title) {
       booksByTitle[el] = books[el];
     }
   });
