@@ -5,6 +5,8 @@ const regd_users = express.Router();
 
 let users = [];
 
+const JWT_SECRET = "SUPERSECRETPASSWORD123";
+
 const isValid = (username) => {
   //returns boolean
   //write code to check is the username is valid
@@ -15,14 +17,31 @@ const isValid = (username) => {
 };
 
 const authenticatedUser = (username, password) => {
-  //returns boolean
-  //write code to check if username and password match the one we have in records.
+  if (
+    users.find((el) => el.username === username && el.password === password)
+  ) {
+    return true;
+  }
+  return false;
+};
+
+const createJWT = (username) => {
+  const payload = { username };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+  return token;
 };
 
 //only registered users can login
 regd_users.post("/login", (req, res) => {
-  //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+  const { username, password } = req.body;
+  if (!authenticatedUser(username, password)) {
+    return res.status(401).json({ message: "Invalid user credentials" });
+  }
+  const token = createJWT(username);
+  req.session.user = { username, token };
+  return res
+    .status(300)
+    .json({ token, message: "User logged in successfully" });
 });
 
 // Add a book review

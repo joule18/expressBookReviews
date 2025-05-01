@@ -20,7 +20,7 @@ public_users.post("/register", (req, res) => {
     password,
   });
   return res.status(300).json({
-    user: { username, password },
+    user: { username },
     message: "User registered successfully.",
   });
 });
