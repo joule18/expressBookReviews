@@ -28,8 +28,7 @@ public_users.get("/author/:author", function (req, res) {
   const bookKeys = Object.keys(books);
   let booksByAuthor = {};
   bookKeys.forEach((el) => {
-    const authorName = books[el].author.toLowerCase().split(" ");
-    if (authorName.find((el) => el === author)) {
+    if (books[el].author.toLowerCase() === author) {
       booksByAuthor[el] = books[el];
     }
   });
@@ -41,8 +40,23 @@ public_users.get("/author/:author", function (req, res) {
 
 // Get all books based on title
 public_users.get("/title/:title", function (req, res) {
-  //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+  let { title } = req.params;
+  title = title.toLowerCase().trim();
+  const bookKeys = Object.keys(books);
+  let booksByTitle = {};
+  bookKeys.forEach((el) => {
+    const bookTitle = books[el].title.toLowerCase().split(" ");
+    if (
+      bookTitle.find((el) => el === title) ||
+      books[el].title.toLowerCase() === title
+    ) {
+      booksByTitle[el] = books[el];
+    }
+  });
+  if (Object.keys(booksByTitle).length == 0) {
+    return res.status(300).send("Title is not present on book collection.");
+  }
+  return res.status(300).json(booksByTitle);
 });
 
 //  Get book review
