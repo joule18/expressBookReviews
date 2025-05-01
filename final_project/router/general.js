@@ -19,7 +19,7 @@ public_users.post("/register", (req, res) => {
     username,
     password,
   });
-  return res.status(300).json({
+  return res.status(201).json({
     user: { username },
     message: "User registered successfully.",
   });
@@ -27,7 +27,7 @@ public_users.post("/register", (req, res) => {
 
 // Get the book list available in the shop
 public_users.get("/", function (req, res) {
-  return res.status(300).json(books);
+  return res.status(200).json(books);
 });
 
 // Get book details based on ISBN
@@ -38,7 +38,7 @@ public_users.get("/isbn/:isbn", function (req, res) {
     return res.status(404).json({ message: "Book not found." });
   }
   const book = books[isbn];
-  return res.status(300).json({ [isbn]: book });
+  return res.status(200).json({ [isbn]: book });
 });
 
 // Get book details based on author
@@ -57,7 +57,7 @@ public_users.get("/author/:author", function (req, res) {
       .status(404)
       .json({ message: "Author is not found on book collection." });
   }
-  return res.status(300).json(booksByAuthor);
+  return res.status(200).json(booksByAuthor);
 });
 
 // Get all books based on title
@@ -76,7 +76,7 @@ public_users.get("/title/:title", function (req, res) {
       .status(404)
       .json({ message: "Title is not found on book collection." });
   }
-  return res.status(300).json(booksByTitle);
+  return res.status(200).json(booksByTitle);
 });
 
 //  Get book review
@@ -85,7 +85,7 @@ public_users.get("/review/:isbn", function (req, res) {
   if (!books.hasOwnProperty(isbn)) {
     return res.status(404).json({ message: "Book not found." });
   }
-  return res.status(300).json(books[isbn].reviews);
+  return res.status(200).json(books[isbn].reviews);
 });
 
 module.exports.general = public_users;

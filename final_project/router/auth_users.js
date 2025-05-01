@@ -40,15 +40,42 @@ regd_users.post("/login", (req, res) => {
   const token = createJWT(username);
   req.session.user = { username, token };
   return res
-    .status(300)
+    .status(200)
     .json({ token, message: "User logged in successfully" });
 });
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
+  const { isbn } = req.params;
+  if (!books.hasOwnProperty(isbn)) {
+    return res.status(404).json({ message: "Yet to be implemented" });
+  }
   return res.status(300).json({ message: "Yet to be implemented" });
 });
+
+//custom log out for testing purposes
+regd_users.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Error during logout." });
+    }
+    res.clearCookie("connect.sid");
+    res.status(200).json({ message: "Logged out successfully." });
+  });
+});
+
+// regd_users.get("/protected", (req, res) => {
+//   // Check if user is logged in through the session or cookie
+//   if (req.session.user) {
+//     // If logged in, proceed with the request
+//     return res
+//       .status(200)
+//       .json({ message: "You are logged in and can access this route" });
+//   }
+
+//   // If not logged in, return an Unauthorized error
+//   return res.status(401).json({ message: "Unauthorized: Please log in first" });
+// });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
