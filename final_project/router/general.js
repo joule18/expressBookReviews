@@ -12,7 +12,7 @@ public_users.post("/register", (req, res) => {
   if (!password || password.trim() === "") {
     return res.status(400).json({ message: "Please input password." });
   }
-  if (users.find((el) => el.username === username)) {
+  if (!isValid(username)) {
     return res.status(409).json({ message: "Username already exists." });
   }
   users.push({
