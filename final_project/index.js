@@ -17,9 +17,16 @@ app.use(
   })
 );
 
-app.use("/customer/auth/*", function auth(req, res, next) {
-  //Write the authenication mechanism here
-});
+app.use("/customer/auth/review", auth, customer_routes);
+
+function auth(req, res, next) {
+  if (!req.session.user) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized. Please login first." });
+  }
+  next();
+}
 
 const PORT = 5000;
 

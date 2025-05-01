@@ -48,9 +48,17 @@ regd_users.post("/login", (req, res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const { isbn } = req.params;
   if (!books.hasOwnProperty(isbn)) {
-    return res.status(404).json({ message: "Yet to be implemented" });
+    return res.status(404).json({ message: "Book not found" });
   }
-  return res.status(300).json({ message: "Yet to be implemented" });
+  const { review } = req.query;
+  if (!review || review.trim() === "") {
+    return res.status(400).json({ message: "Please input a review." });
+  }
+  const { username } = req.session.user;
+
+  books[isbn].reviews[username] = review;
+
+  return res.status(200).json({ message: "Review successfully added." });
 });
 
 //custom log out for testing purposes
@@ -63,19 +71,6 @@ regd_users.post("/logout", (req, res) => {
     res.status(200).json({ message: "Logged out successfully." });
   });
 });
-
-// regd_users.get("/protected", (req, res) => {
-//   // Check if user is logged in through the session or cookie
-//   if (req.session.user) {
-//     // If logged in, proceed with the request
-//     return res
-//       .status(200)
-//       .json({ message: "You are logged in and can access this route" });
-//   }
-
-//   // If not logged in, return an Unauthorized error
-//   return res.status(401).json({ message: "Unauthorized: Please log in first" });
-// });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
